@@ -27,7 +27,7 @@ resource.setrlimit(
 
 nest.set_verbosity("M_ERROR")
 
-TIME_SIMULATION = 20
+TIME_SIMULATION = 1000
 
 create_execution_key = lambda i, c, m, p: f"{create_sound_key(i)}&{c}&{m}&{p}"
 ex_key_with_time = (
