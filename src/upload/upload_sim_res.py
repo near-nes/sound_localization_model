@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from config import bucket_name, client, results_dir
+from upload.config import bucket_name, client, results_dir
 
 
 def upload_to_gcs(local_file: Path):

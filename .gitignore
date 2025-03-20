@@ -11,3 +11,4 @@ results/*
 myoga_cache
 data/**/**
 data/Dimensions.xlsx
+secrets

@@ -61,18 +61,18 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(i, 1000 * b2.ms) for i in [1000, 10000] * b2.Hz]
+    inputs = [Tone(i, 1000 * b2.ms) for i in [1000, 10000, 100] * b2.Hz]
     for e in inputs:
         e.sound.level = 70 * b2h.dB
 
     models = [BrainstemModel, BrainstemModel, BrainstemModel]
     cochlea_key = TC_COC_KEY
 
-    p2 = TCParam("itd_only")
-    p2.cochlea[cochlea_key]['subj_number'] = 'itd_only'
+    p2 = Parameters("itd_only")
+    p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
 
-    p3 = TCParam("ild_only")
-    p3.cochlea[cochlea_key]['subj_number'] = 'ild_only'
+    p3 = Parameters("ild_only")
+    p3.cochlea[cochlea_key]['hrtf_params']['subj_number']  = 'ild_only'
 
     params = [p2,p3]
 

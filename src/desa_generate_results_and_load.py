@@ -18,7 +18,7 @@ from models.BrainstemModel.params import Parameters as TCParam
 from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise
 from utils.log import logger, tqdm
 
-from upload_sim_res import upload_to_gcs
+from upload.upload_sim_res import upload_to_gcs
 
 # big result objects need big stacks
 resource.setrlimit(
@@ -27,8 +27,7 @@ resource.setrlimit(
 
 nest.set_verbosity("M_ERROR")
 
-TIME_SIMULATION = 200
-
+TIME_SIMULATION = 20
 
 create_execution_key = lambda i, c, m, p: f"{create_sound_key(i)}&{c}&{m}&{p}"
 ex_key_with_time = (
@@ -36,8 +35,7 @@ ex_key_with_time = (
 )
 
 CURRENT_TEST = "test"
-UPLOAD_AND_DELETE = False
-
+UPLOAD_AND_DELETE = True
 
 def create_save_result_object(
     input,
@@ -64,7 +62,7 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(i, 1000 * b2.ms) for i in [100] * b2.Hz]
+    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [100] * b2.Hz]
     for e in inputs:
         e.sound.level = 70 * b2h.dB
 
@@ -89,7 +87,7 @@ if __name__ == "__main__":
             ex_key = ex_key_with_time(input, cochlea_key, Model.key, param.key)
             logger.info(f">>>>> now testing arch n.{current_run+1} of {num_runs}")
             angle_to_rate = {}
-            for angle in tqdm(ANGLES, "⮡ angles"):
+            for angle in tqdm([0], "⮡ angles"):
                 nest.ResetKernel()
                 nest.SetKernelStatus(param.CONFIG.NEST_KERNEL_PARAMS)
 

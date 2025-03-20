@@ -840,7 +840,7 @@ def draw_spikes_single_pop(
     num_neurons = len(spikes["global_ids"])
     cf = erbspace(CFMIN, CFMAX, num_neurons)
     neuron_to_cf = {global_id: freq for global_id, freq in zip(spikes["global_ids"], cf)}
-    duration = data.get("simulation_time", data["basesound"].sound.duration / b2.ms)
+    duration = res.get("simulation_time", res["basesound"].sound.duration / b2.ms)
     if color == None:
         if side == 'L': color = 'm'
         elif side == 'R': color = 'g'
