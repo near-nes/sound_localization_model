@@ -7,7 +7,7 @@ from upload.config import bucket_name, client, results_dir
 def upload_to_gcs(local_file: Path):
     """Uploads a file to Google Cloud Storage"""
     bucket = client.bucket(bucket_name)
-    blob = bucket.blob(local_file.name)
+    blob = bucket.blob(local_file)
     blob.upload_from_filename(str(local_file))
     print(f"Uploaded {local_file} to GCS")
 

@@ -29,12 +29,12 @@ nest.set_verbosity("M_ERROR")
 
 TIME_SIMULATION = 1000
 
-create_execution_key = lambda i, c, m, p: f"{create_sound_key(i)}&{c}&{m}&{p}"
+create_execution_key = lambda i, c, p: f"{create_sound_key(i)}&{c}&{p}"
 ex_key_with_time = (
     lambda *args: f"{datetime.datetime.now().isoformat()[:-7]}&{create_execution_key(*args)}"
 )
 
-CURRENT_TEST = "test"
+CURRENT_TEST = "angles2rates"
 UPLOAD_AND_DELETE = True
 
 def create_save_result_object(
@@ -62,13 +62,24 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [100] * b2.Hz]
+    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [1000, 100] * b2.Hz]
     for e in inputs:
         e.sound.level = 70 * b2h.dB
 
-    models = [BrainstemModel]
-    params = [TCParam("subject_1")]
+    models = [BrainstemModel, BrainstemModel, BrainstemModel]
     cochlea_key = TC_COC_KEY
+    
+
+    p2 = TCParam("subject_2")
+    p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 2
+
+    p3 = TCParam("itd_only")
+    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+
+    p4 = TCParam("ild_only")
+    p4.cochlea[cochlea_key]['hrtf_params']['subj_number']  = 'ild_only'
+
+    params = [p4]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
@@ -79,15 +90,13 @@ if __name__ == "__main__":
 
     for Model, param in zip(models, params):
         curr_ex = f"{Model.key}&{cochlea_key}&{param.key}"
-        curr_result_dir = result_dir / curr_ex
-        curr_result_dir.mkdir(exist_ok=True, parents=True)
         result_paths = []
         for input in inputs:
             start = timer()
-            ex_key = ex_key_with_time(input, cochlea_key, Model.key, param.key)
+            ex_key = ex_key_with_time(input, cochlea_key, param.key)
             logger.info(f">>>>> now testing arch n.{current_run+1} of {num_runs}")
             angle_to_rate = {}
-            for angle in tqdm([0], "⮡ angles"):
+            for angle in tqdm(ANGLES, "⮡ angles"):
                 nest.ResetKernel()
                 nest.SetKernelStatus(param.CONFIG.NEST_KERNEL_PARAMS)
 
@@ -110,7 +119,7 @@ if __name__ == "__main__":
             logger.info(f"saving all angles for model {ex_key}...")
             # save model results to file
             filename = f"{ex_key}.pic"
-            result_file = curr_result_dir / filename
+            result_file = result_dir / filename
             result_paths.append(result_file)
 
             end = timer()
