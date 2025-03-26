@@ -340,8 +340,8 @@ def draw_rate_vs_angle(
 
     plt.suptitle(title)
     plt.tight_layout()
-
-    return fig
+    plt.show()
+    return
 
 
 def draw_single_angle_histogram(data, angle, population="SBC", fontsize=16, alpha=0.8):
