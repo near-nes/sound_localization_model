@@ -41,6 +41,7 @@ def list_blob_names():
     blobs = bucket.list_blobs()
     for blob in blobs:
         show_blob_info(blob)
+    
 
 def delete_from_gcs(blob_name: str):
     """Deletes a file from Google Cloud Storage"""

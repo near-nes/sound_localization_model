@@ -19,6 +19,7 @@ from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise
 from utils.log import logger, tqdm
 
 from upload.upload_sim_res import upload_to_gcs
+import os
 
 # big result objects need big stacks
 resource.setrlimit(
@@ -62,24 +63,25 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [1000, 100] * b2.Hz]
+    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [0.1] * b2.kHz]
     for e in inputs:
         e.sound.level = 70 * b2h.dB
 
-    models = [BrainstemModel, BrainstemModel, BrainstemModel]
+    models = [BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel]
     cochlea_key = TC_COC_KEY
     
 
-    p2 = TCParam("subject_2")
-    p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 2
+    p4 = TCParam("itd_only_no_MSO_inh")
 
-    p3 = TCParam("itd_only")
-    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    p4.SYN_WEIGHTS.MNTBCs2MSO = 0
+    p4.SYN_WEIGHTS.LNTBCs2MSO = 0
 
-    p4 = TCParam("ild_only")
-    p4.cochlea[cochlea_key]['hrtf_params']['subj_number']  = 'ild_only'
+    p5 = TCParam("subject_1_no_MSO_inh")
+    p5.SYN_WEIGHTS.MNTBCs2MSO = 0
+    p5.SYN_WEIGHTS.LNTBCs2MSO = 0
 
-    params = [p4]
+    params = [p4, p5]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
@@ -93,7 +95,7 @@ if __name__ == "__main__":
         result_paths = []
         for input in inputs:
             start = timer()
-            ex_key = ex_key_with_time(input, cochlea_key, param.key)
+            ex_key = create_execution_key(input, cochlea_key, param.key)
             logger.info(f">>>>> now testing arch n.{current_run+1} of {num_runs}")
             angle_to_rate = {}
             for angle in tqdm(ANGLES, "⮡ angles"):
@@ -140,10 +142,10 @@ if __name__ == "__main__":
             if UPLOAD_AND_DELETE:
                 logger.warning(f"uploading {result_file} to GCS...")
                 # upload results to GCS
-                upload_to_gcs(result_file)
+                upload_to_gcs(str(result_file))
                 logger.warning(f"uploaded {result_file} to GCS. Deleting local file...")
                 # delete local file
-                result_file.unlink()
+                os.unlink(str(result_file))
                 logger.info(f"deleted {result_file}")
 
     trials_pbar.close()
