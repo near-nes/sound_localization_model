@@ -61,52 +61,51 @@ class Parameters:
 
     @dataclass
     class DELAYS:  # ms
-        # GBCs2MNTBCs: float = 0.45
-        # GBCs2LNTBCs: float = 0.45
-        # SBCs2MSO_exc_ipsi: float = 2
-        # SBCs2MSO_exc_contra: float = 2
-
-        # def __init__(self):
-        #     self._DELTA_IPSI: float = 0.2
-        #     self._DELTA_CONTRA: float = -0.4
-
-        # @property
-        # def DELTA_IPSI(self):
-        #     return self._DELTA_IPSI
-
-        # @DELTA_IPSI.setter
-        # def DELTA_IPSI(self, value):
-        #     self._DELTA_IPSI = value
-
-        # @property
-        # def DELTA_CONTRA(self):
-        #     return self._DELTA_CONTRA
-
-        # @DELTA_CONTRA.setter
-        # def DELTA_CONTRA(self, value):
-        #     self._DELTA_CONTRA = value
-
-        # @property
-        # def LNTBCs2MSO_inh_ipsi(self):
-        #     return 1.44 + self.DELTA_IPSI
-
-        # @property
-        # def MNTBCs2MSO_inh_contra(self):
-        #     return 1.44 + self.DELTA_CONTRA
-
-        DELTA_IPSI: float = 0.2
-        DELTA_CONTRA: float = -0.4
         GBCs2MNTBCs: float = 0.45
         GBCs2LNTBCs: float = 0.45
-        SBCs2MSO_exc_ipsi: float = 2  # MSO ipsilateral excitation
-        SBCs2MSO_exc_contra: float = 2  # MSO contralateral excitation
-        LNTBCs2MSO_inh_ipsi: float = (
-            1.44 + DELTA_IPSI
-        )  # MSO ipsilateral inhibition (mirrors SBC)
-        # SBCs2MSO_inh_ipsi: float = 1  # doesn't exist, MSO ipsilateral inhibition
-        MNTBCs2MSO_inh_contra: float = (
-            1.44 + DELTA_CONTRA
-        )  # MSO contralateral inhibition
+        SBCs2MSO_exc_ipsi: float = 2
+        SBCs2MSO_exc_contra: float = 2
+
+        def __init__(self):
+            self._DELTA_IPSI: float = 0.2
+            self._DELTA_CONTRA: float = -0.4
+
+        @property
+        def DELTA_IPSI(self):
+            return self._DELTA_IPSI
+
+        @DELTA_IPSI.setter
+        def DELTA_IPSI(self, value):
+            self._DELTA_IPSI = value
+
+        @property
+        def DELTA_CONTRA(self):
+            return self._DELTA_CONTRA
+
+        @DELTA_CONTRA.setter
+        def DELTA_CONTRA(self, value):
+            self._DELTA_CONTRA = value
+
+        @property
+        def LNTBCs2MSO_inh_ipsi(self):
+            return 1.44 + self.DELTA_IPSI
+
+        @property
+        def MNTBCs2MSO_inh_contra(self):
+            return 1.44 + self.DELTA_CONTRA
+
+        # DELTA_IPSI: float = 0.2
+        # DELTA_CONTRA: float = -0.4
+        # GBCs2MNTBCs: float = 0.45
+        # GBCs2LNTBCs: float = 0.45
+        # SBCs2MSO_exc_ipsi: float = 2  # MSO ipsilateral excitation
+        # SBCs2MSO_exc_contra: float = 2  # MSO contralateral excitation
+        # LNTBCs2MSO_inh_ipsi: float = (
+        #     1.44 + DELTA_IPSI
+        # )  # MSO ipsilateral inhibition (mirrors SBC)
+        # MNTBCs2MSO_inh_contra: float = (
+        #     1.44 + DELTA_CONTRA
+        # )  # MSO contralateral inhibition
 
     @dataclass
     class MSO_TAUS:

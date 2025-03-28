@@ -74,14 +74,15 @@ if __name__ == "__main__":
     p4 = TCParam("itd_only_no_MSO_inh")
 
     p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
-    p4.SYN_WEIGHTS.MNTBCs2MSO = 0
-    p4.SYN_WEIGHTS.LNTBCs2MSO = 0
-
-    p5 = TCParam("subject_1_no_MSO_inh")
-    p5.SYN_WEIGHTS.MNTBCs2MSO = 0
-    p5.SYN_WEIGHTS.LNTBCs2MSO = 0
-
-    params = [p4, p5]
+    print(p4.DELAYS.DELTA_CONTRA)
+    print(p4.DELAYS.DELTA_IPSI)
+    p4.DELAYS.DELTA_CONTRA = 0
+    p4.DELAYS.DELTA_IPSI = 0
+    print(p4.DELAYS.DELTA_CONTRA)
+    print(p4.DELAYS.DELTA_IPSI)
+    print(p4.DELAYS.MNTBCs2MSO_inh_contra)
+    print(p4.DELAYS.LNTBCs2MSO_inh_ipsi)
+    params = [p4]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
