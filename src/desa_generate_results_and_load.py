@@ -63,26 +63,31 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [0.1] * b2.kHz]
+
+    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [300,400,500,600,700,800,900,1100,1200,1300,1400] * b2.Hz]
     for e in inputs:
         e.sound.level = 70 * b2h.dB
-
+        
     models = [BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel]
     cochlea_key = TC_COC_KEY
     
 
-    p4 = TCParam("itd_only_no_MSO_inh")
+    p1 = TCParam("subject_1")
 
-    p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
-    print(p4.DELAYS.DELTA_CONTRA)
-    print(p4.DELAYS.DELTA_IPSI)
-    p4.DELAYS.DELTA_CONTRA = 0
-    p4.DELAYS.DELTA_IPSI = 0
-    print(p4.DELAYS.DELTA_CONTRA)
-    print(p4.DELAYS.DELTA_IPSI)
-    print(p4.DELAYS.MNTBCs2MSO_inh_contra)
-    print(p4.DELAYS.LNTBCs2MSO_inh_ipsi)
-    params = [p4]
+
+    # p3 = TCParam("itd_only_myoga_null")
+    # p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    # p3.DELAYS.DELTA_CONTRA = 0
+    # p3.DELAYS.DELTA_IPSI = 0
+
+    # p4 = TCParam("itd_only_myoga_inv")
+
+    # p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    # x = p4.DELAYS.DELTA_CONTRA
+    # p4.DELAYS.DELTA_CONTRA = p4.DELAYS.DELTA_IPSI
+    # p4.DELAYS.DELTA_IPSI = x
+
+    params = [p1]
 
     num_runs = len(inputs) * len(params)
     current_run = 0

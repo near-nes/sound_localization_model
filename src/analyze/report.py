@@ -722,19 +722,20 @@ def calculate_vector_strength_from_result(
     fig, ax = plt.subplots(1, 1, figsize=figsize)
     hist1, _ = np.histogram(phases, bins=bins)
     ax.bar(bin_centers, hist1, width=2 * np.pi / n_bins, alpha=0.7, color = color)
-    if(bandwidth == 0):
-        ax.set_title(
-            f"Neuron {relevant_neurons_ids[0]} (CF: {cf_neuron:.1f} Hz)\nVS={vs:.3f}"
-        )
-    else:
-        ax.set_title(
-            f"Neurons {relevant_neurons_ids[0]} : {relevant_neurons_ids[-1]} (center CF: {cf_neuron:.1f} Hz)\nVS={vs:.3f}"
-        )
+    # if(bandwidth == 0):
+    #     ax.set_title(
+    #         f"Neuron {relevant_neurons_ids[0]} (CF: {cf_neuron:.1f} Hz)\nVS={vs:.3f}"
+    #     )
+    # else:
+    #     ax.set_title(
+    #         f"Neurons {relevant_neurons_ids[0]} : {relevant_neurons_ids[-1]} (center CF: {cf_neuron:.1f} Hz)\nVS={vs:.3f}"
+    #     )
+    ax.set_title(f"{freq}\nR={vs:.3f}")
     ax.set_xlabel("Phase (radians)")
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     plt.show()
-    return (vs)
+    return (vs, fig)
 
 def calculate_vector_strength_from_result_polar(
         res,
@@ -847,7 +848,7 @@ def draw_spikes_single_pop(
         else: color = 'k'
     if xlim == None: 
         xlim_array = [0,duration]
-    else: xlim_array = [0,xlim]
+    else: xlim_array = xlim
     if y_ax == 'ids':
         y_values = spikes['senders']
         ylabel = "id_senders"
@@ -875,7 +876,7 @@ def draw_spikes_single_pop(
         ax.set_yticks([0, 2219, 12709, 29573, 34999]) #8552 500 Hz
         ax.set_yticklabels(int(cf[t]) for t in [0, 2219, 12709, 29573, 34999])
 
-
-    return fig
+    plt.show()
+    return
 
 
