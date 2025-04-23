@@ -15,7 +15,7 @@ from cochleas.consts import ANGLES
 from consts import Paths, save_current_conf
 from models.BrainstemModel.BrainstemModel import BrainstemModel
 from models.BrainstemModel.params import Parameters as TCParam
-from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise
+from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise, Clicks, HarmonicComplex
 from utils.log import logger, tqdm
 
 from upload.upload_sim_res import upload_to_gcs
@@ -64,16 +64,25 @@ def create_save_result_object(
 if __name__ == "__main__":
 
 
-    inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [300,400,500,600,700,800,900,1100,1200,1300,1400] * b2.Hz]
+    #inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [0.2, 0.1, 0.3, 0.4, 0.5] * b2.kHz]
+    inputs = [WhiteNoise(TIME_SIMULATION * b2.ms)]
+    #inputs = [Clicks(duration=TIME_SIMULATION * b2.ms, click_duration=0.1 * b2.ms, interval=1 * b2.ms)]
+    #inputs = [HarmonicComplex(i, TIME_SIMULATION * b2.ms) for i in [0.1] * b2.kHz]
+
     for e in inputs:
         e.sound.level = 70 * b2h.dB
         
-    models = [BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel, BrainstemModel]
+    models = [BrainstemModel, BrainstemModel]
     cochlea_key = TC_COC_KEY
     
 
-    p1 = TCParam("subject_1")
+    #p1 = TCParam("subject_1")
 
+    p2 = TCParam("itd_only")
+    p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+
+    p3 = TCParam("ild_only")
+    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'ild_only'
 
     # p3 = TCParam("itd_only_myoga_null")
     # p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
@@ -87,7 +96,7 @@ if __name__ == "__main__":
     # p4.DELAYS.DELTA_CONTRA = p4.DELAYS.DELTA_IPSI
     # p4.DELAYS.DELTA_IPSI = x
 
-    params = [p1]
+    params = [p2, p3]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
@@ -151,8 +160,7 @@ if __name__ == "__main__":
                 upload_to_gcs(str(result_file))
                 logger.warning(f"uploaded {result_file} to GCS. Deleting local file...")
                 # delete local file
-                os.unlink(str(result_file))
-                logger.info(f"deleted {result_file}")
+                os.unlink(str(result_file)) 
 
     trials_pbar.close()
     logger.debug(times)
