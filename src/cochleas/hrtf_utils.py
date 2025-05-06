@@ -75,17 +75,19 @@ def calculate_lefttoright_level_diff(freq, angle):
 
 def synthetic_ild(sound: Tone, angle: int):
     if type(sound) is not Tone:
-        logger.error(f"selected HRTF synthetic_ild, but it only supports Tones")
-        raise TypeError(f"sound is {type(sound)}, while it should be {Tone}")
-
-    diff = calculate_lefttoright_level_diff(sound.frequency, angle)
+        # Linear interpolation between +15dB and -15dB for angles between -90 and +90
+        # For angle 0, diff will be 0dB
+        diff = -angle / 90 * 15  # This gives +15 for -90, 0 for 0, and -15 for +90
+    else:
+        diff = calculate_lefttoright_level_diff(sound.frequency, angle)
+    
     logger.debug(f"ILD calculated as {diff}")
     left = Sound(sound.sound)
     right = Sound(sound.sound)
     if angle > 0:
         left.set_level(left.get_level() - diff)
     else:
-        right.set_level(right.get_level() - diff)
+        right.set_level(right.get_level() - diff) 
 
     # azimuth_rad = np.radians(angle)
     # max_mask = np.abs(np.sin(azimuth_rad))
