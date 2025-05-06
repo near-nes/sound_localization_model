@@ -16,7 +16,7 @@ from bisect import bisect_left
 
 from consts import Paths
 from models.InhModel.params import Parameters
-from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise, Clicks
+from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise, Clicks, HarmonicComplex
 from utils.log import logger
 
 from .anf_response import AnfResponse
@@ -68,6 +68,12 @@ def create_sound_key(sound):
         add_info = str(sound.number).replace(" ", "")
         if sound.peak is not None:
             level = sound.peak
+        else:
+            level = "XX"
+    elif type(sound) is HarmonicComplex:
+        sound_type = "harmonic"
+        if sound.sound.level is not None:
+            level = int(sound.sound.level)
         else:
             level = "XX"
     else:

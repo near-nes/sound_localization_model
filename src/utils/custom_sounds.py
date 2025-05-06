@@ -5,6 +5,7 @@ DEFAULT_SOUND_DURATION = 25 * b2.ms
 DEFAULT_SILENCE_DURATION = DEFAULT_BURST_SINGLE_DURATION = 25 * b2.ms
 DEFAULT_BURST_REP = 3
 DEFAULT_CLICKS_NUMBER = 10
+DEFAULT_CLICKS_DURATION = 10
 DEFAULT_CLICKS_INTERVAL = 50
 
 
@@ -51,6 +52,15 @@ class WhiteNoise:
         if level is not None:
             self.sound.level = level
 
+class HarmonicComplex:
+    frequency: b2.Quantity
+    sound: b2h.Sound
+
+    def __init__(
+        self, frequency: b2.Quantity, duration=DEFAULT_SOUND_DURATION, **kwargs
+    ):
+        self.frequency = frequency
+        self.sound = b2h.Sound.harmoniccomplex(frequency, duration, **kwargs)
 
 class Click:
     sound: b2h.Sound
@@ -63,10 +73,25 @@ class Click:
 class Clicks:
     sound: b2h.Sound
 
-    def __init__(self, duration=DEFAULT_SOUND_DURATION, number = DEFAULT_CLICKS_NUMBER, interval = DEFAULT_CLICKS_INTERVAL, level=None, **kwargs):
+    def __init__(self, duration=DEFAULT_SOUND_DURATION, click_duration = DEFAULT_CLICKS_DURATION, interval = DEFAULT_CLICKS_INTERVAL, level=None, **kwargs):
+
         self.peak = level
-        self.sound = b2h.clicks(duration,number,interval, self.peak)
-        self.number = number
+
+        if interval < click_duration:
+            interval = click_duration
+            print(f"Warning: Interval adjusted to click_duration ({click_duration} seconds) to prevent overlapping clicks.")
+        
+        c = b2h.click(click_duration, self.peak)
+        i = b2h.silence(interval)
+        p = c + i
+        n = int(duration/interval)
+        train = p.repeat(n)
+
+        if level is not None:
+            self.sound.level = level
+            
+        self.sound = train
+        self.number = n
 
 
 
