@@ -77,7 +77,7 @@ def synthetic_ild(sound: Tone, angle: int):
     if type(sound) is not Tone:
         # Linear interpolation between +15dB and -15dB for angles between -90 and +90
         # For angle 0, diff will be 0dB
-        diff = -angle / 90 * 15  # This gives +15 for -90, 0 for 0, and -15 for +90
+        diff = np.abs((angle / 90) * 15) * dB  # This gives +15 for -90, 0 for 0, and -15 for +90
     else:
         diff = calculate_lefttoright_level_diff(sound.frequency, angle)
     
