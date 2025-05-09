@@ -35,7 +35,7 @@ ex_key_with_time = (
     lambda *args: f"{datetime.datetime.now().isoformat()[:-7]}&{create_execution_key(*args)}"
 )
 
-CURRENT_TEST = "angles2rates"
+CURRENT_TEST = "sbc2lso8"
 UPLOAD_AND_DELETE = True
 
 def create_save_result_object(
@@ -63,40 +63,50 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-
-    #inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [0.2, 0.1, 0.3, 0.4, 0.5] * b2.kHz]
-    inputs = [WhiteNoise(TIME_SIMULATION * b2.ms)]
+    inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(1000 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(10000 * b2.Hz, TIME_SIMULATION * b2.ms), WhiteNoise(TIME_SIMULATION * b2.ms)]
+    #inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [100, 1000, 10000] * b2.Hz]
+    #inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms)]
+    #inputs = [WhiteNoise(TIME_SIMULATION * b2.ms)]
     #inputs = [Clicks(duration=TIME_SIMULATION * b2.ms, click_duration=0.1 * b2.ms, interval=1 * b2.ms)]
     #inputs = [HarmonicComplex(i, TIME_SIMULATION * b2.ms) for i in [0.1] * b2.kHz]
 
     for e in inputs:
         e.sound.level = 70 * b2h.dB
         
-    models = [BrainstemModel, BrainstemModel]
+    models = [BrainstemModel]
     cochlea_key = TC_COC_KEY
     
 
-    #p1 = TCParam("subject_1")
+    p3 = TCParam("subject_3")
+    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 3
+    p4 = TCParam("subject_4")
+    p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 4
+    p5 = TCParam("subject_5")
+    p5.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 5
 
-    p2 = TCParam("itd_only")
-    p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    # p2 = TCParam("itd_only")
+    # p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+    # p3 = TCParam("ild_only")
+    # p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'ild_only'
+    
+#     p4 = TCParam("itd_only_myoga_null")
+#     p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+#     p4.DELAYS.DELTA_CONTRA = 0
+#     p4.DELAYS.DELTA_IPSI = 0
 
-    p3 = TCParam("ild_only")
-    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'ild_only'
+#     p5 = TCParam("itd_only_myoga_inv")
+#     p5.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+#     x = p5.DELAYS.DELTA_CONTRA
+#     p5.DELAYS.DELTA_CONTRA = p5.DELAYS.DELTA_IPSI
+#     p5.DELAYS.DELTA_IPSI = x
+    
+#     p6 = TCParam("itd_only_no_MSO_inh")
 
-    # p3 = TCParam("itd_only_myoga_null")
-    # p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
-    # p3.DELAYS.DELTA_CONTRA = 0
-    # p3.DELAYS.DELTA_IPSI = 0
+#     p6.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
+#     p6.SYN_WEIGHTS.LNTBCs2MSO = 0
+#     p6.SYN_WEIGHTS.NTBCs2MSO = 0
 
-    # p4 = TCParam("itd_only_myoga_inv")
-
-    # p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
-    # x = p4.DELAYS.DELTA_CONTRA
-    # p4.DELAYS.DELTA_CONTRA = p4.DELAYS.DELTA_IPSI
-    # p4.DELAYS.DELTA_IPSI = x
-
-    params = [p2, p3]
+    params = [p3, p4, p5]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
