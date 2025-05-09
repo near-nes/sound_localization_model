@@ -131,7 +131,7 @@ class Parameters:
         ANFs2GBCs: float = 7.0
         GBCs2LNTBCs: float = 20.0
         GBCs2MNTBCs: float = 30.0
-        SBCs2LSO: float = 5.0
+        SBCs2LSO: float = 8.0 #5
         MNTBCs2LSO: float = -20.0
         MNTBCs2MSO: float = -40.0
         LNTBCs2MSO: float = -40.0
