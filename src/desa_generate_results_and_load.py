@@ -35,8 +35,8 @@ ex_key_with_time = (
     lambda *args: f"{datetime.datetime.now().isoformat()[:-7]}&{create_execution_key(*args)}"
 )
 
-CURRENT_TEST = "sbc2lso8"
-UPLOAD_AND_DELETE = True
+CURRENT_TEST = "wn_myoga"
+UPLOAD_AND_DELETE = False
 
 def create_save_result_object(
     input,
