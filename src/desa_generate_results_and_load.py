@@ -1,14 +1,11 @@
 import datetime
-import resource
 from datetime import timedelta
 from pathlib import Path
 from timeit import default_timer as timer
-
 import brian2 as b2
 import brian2hears as b2h
 import dill
 import nest
-import nest.voltage_trace
 from brian2 import Hz
 from cochleas.anf_utils import TC_COC_KEY, create_sound_key, load_anf_response
 from cochleas.consts import ANGLES
@@ -18,13 +15,6 @@ from models.BrainstemModel.params import Parameters as TCParam
 from utils.custom_sounds import Click, Tone, ToneBurst, WhiteNoise, Clicks, HarmonicComplex
 from utils.log import logger, tqdm
 
-from upload.upload_sim_res import upload_to_gcs
-import os
-
-# big result objects need big stacks
-resource.setrlimit(
-    resource.RLIMIT_STACK, (resource.RLIM_INFINITY, resource.RLIM_INFINITY)
-)
 
 nest.set_verbosity("M_ERROR")
 
@@ -34,9 +24,6 @@ create_execution_key = lambda i, c, p: f"{create_sound_key(i)}&{c}&{p}"
 ex_key_with_time = (
     lambda *args: f"{datetime.datetime.now().isoformat()[:-7]}&{create_execution_key(*args)}"
 )
-
-CURRENT_TEST = "wn_myoga"
-UPLOAD_AND_DELETE = False
 
 def create_save_result_object(
     input,
@@ -63,9 +50,9 @@ def create_save_result_object(
 
 if __name__ == "__main__":
 
-    inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(1000 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(10000 * b2.Hz, TIME_SIMULATION * b2.ms), WhiteNoise(TIME_SIMULATION * b2.ms)]
+    #inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(1000 * b2.Hz, TIME_SIMULATION * b2.ms), Tone(10000 * b2.Hz, TIME_SIMULATION * b2.ms), WhiteNoise(TIME_SIMULATION * b2.ms)]
     #inputs = [Tone(i, TIME_SIMULATION * b2.ms) for i in [100, 1000, 10000] * b2.Hz]
-    #inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms)]
+    inputs = [Tone(100 * b2.Hz, TIME_SIMULATION * b2.ms)]
     #inputs = [WhiteNoise(TIME_SIMULATION * b2.ms)]
     #inputs = [Clicks(duration=TIME_SIMULATION * b2.ms, click_duration=0.1 * b2.ms, interval=1 * b2.ms)]
     #inputs = [HarmonicComplex(i, TIME_SIMULATION * b2.ms) for i in [0.1] * b2.kHz]
@@ -75,14 +62,9 @@ if __name__ == "__main__":
         
     models = [BrainstemModel]
     cochlea_key = TC_COC_KEY
-    
 
-    p3 = TCParam("subject_3")
-    p3.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 3
-    p4 = TCParam("subject_4")
-    p4.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 4
-    p5 = TCParam("subject_5")
-    p5.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 5
+    p1 = TCParam("subject_1")
+    p1.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 1
 
     # p2 = TCParam("itd_only")
     # p2.cochlea[cochlea_key]['hrtf_params']['subj_number'] = 'itd_only'
@@ -106,13 +88,13 @@ if __name__ == "__main__":
 #     p6.SYN_WEIGHTS.LNTBCs2MSO = 0
 #     p6.SYN_WEIGHTS.NTBCs2MSO = 0
 
-    params = [p3, p4, p5]
+    params = [p1]
 
     num_runs = len(inputs) * len(params)
     current_run = 0
     logger.info(f"launching {num_runs} trials...")
     times = {}
-    result_dir = Path(Paths.RESULTS_DIR) / CURRENT_TEST
+    result_dir = Path(Paths.RESULTS_DIR)
     trials_pbar = tqdm(total=num_runs, desc="trials")
 
     for Model, param in zip(models, params):
@@ -164,13 +146,6 @@ if __name__ == "__main__":
                 simulation_time=TIME_SIMULATION,
                 times={"start": start, "end": end, "timetaken": timetaken},
             )
-            if UPLOAD_AND_DELETE:
-                logger.warning(f"uploading {result_file} to GCS...")
-                # upload results to GCS
-                upload_to_gcs(str(result_file))
-                logger.warning(f"uploaded {result_file} to GCS. Deleting local file...")
-                # delete local file
-                os.unlink(str(result_file)) 
 
     trials_pbar.close()
     logger.debug(times)
