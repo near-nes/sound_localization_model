@@ -1,7 +1,7 @@
 from os import makedirs
 
 import numpy as np
-from brian2 import Hz, Inf, SpikeMonitor, clip, kHz, ms, plot, run, show
+from brian2 import Hz, SpikeMonitor, clip, kHz, ms, plot, run, show #removed Inf
 from brian2hears import (
     DCGC,
     FilterbankGroup,

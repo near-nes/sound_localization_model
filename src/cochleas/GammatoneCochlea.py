@@ -1,7 +1,7 @@
 from os import makedirs
 
 import numpy as np
-from brian2 import Inf, SpikeMonitor, clip, ms, plot, run, show
+from brian2 import SpikeMonitor, clip, ms, plot, run, show #removed Inf
 from brian2hears import (
     IRCAM_LISTEN,
     FilterbankGroup,
