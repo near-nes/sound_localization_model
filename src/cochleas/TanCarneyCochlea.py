@@ -7,14 +7,13 @@ from joblib import Memory
 from scipy import signal
 from sorcery import dict_of
 
-from consts import Paths
+from utils.path_utils import Paths
 from utils.custom_sounds import Tone, ToneBurst
-from utils.log import logger, tqdm
+from utils.log_utils import logger, tqdm
 from utils.manual_fixes_to_b2h.MiddleEar import MiddleEar
 
-from .anf_response import AnfResponse
-from .consts import CFMAX, CFMIN, NUM_CF
-from .hrtf_utils import run_hrtf
+from utils.cochlea_utils import CFMAX, CFMIN, NUM_CF, AnfResponse
+from utils.hrtf_utils import run_hrtf
 
 COCHLEA_KEY = f"TanCarney"
 CACHE_DIR = Paths.ANF_SPIKES_DIR + COCHLEA_KEY + "/"

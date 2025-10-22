@@ -10,15 +10,15 @@ from joblib import Memory
 from scipy.interpolate import interp1d
 from sorcery import dict_of
 
-from cochleas.anf_response import AnfResponse
-from consts import Paths
+from utils.cochlea_utils import AnfResponse
+from utils.path_utils import Paths
 from utils.custom_sounds import Tone
-from utils.log import logger
+from utils.log_utils import logger
 
-from .consts import CFMAX, CFMIN, NUM_ANF_PER_HC
-from .consts import NUM_CF as N_IHCs
+from utils.cochlea_utils import CFMAX, CFMIN, NUM_ANF_PER_HC
+from utils.cochlea_utils import NUM_CF as N_IHCs
 
-COCHLEA_KEY = "ppg"
+COCHLEA_KEY = "Ppg"
 CACHE_DIR = Paths.ANF_SPIKES_DIR + COCHLEA_KEY + "/"
 makedirs(CACHE_DIR, exist_ok=True)
 

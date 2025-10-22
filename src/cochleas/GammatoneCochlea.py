@@ -14,23 +14,23 @@ from brian2hears import (
 from joblib import Memory
 from sorcery import dict_of
 
-from consts import Paths
+from utils.path_utils import Paths
 from utils.custom_sounds import Tone, ToneBurst
-from utils.log import logger
+from utils.log_utils import logger
 from utils.manual_fixes_to_b2h.HeadlessDatabase import HeadlessDatabase
 
-from .anf_response import AnfResponse
-from .consts import (
+from utils.cochlea_utils import (
     ANGLE_TO_IRCAM,
     CFMAX,
     CFMIN,
     ITD_REMOVAL_STRAT,
     NUM_ANF_PER_HC,
     NUM_CF,
+    AnfResponse
 )
-from .hrtf_utils import run_hrtf
+from utils.hrtf_utils import run_hrtf
 
-COCHLEA_KEY = f"gammatone"
+COCHLEA_KEY = f"Gammatone"
 CACHE_DIR = Paths.ANF_SPIKES_DIR + COCHLEA_KEY + "/"
 makedirs(CACHE_DIR, exist_ok=True)
 

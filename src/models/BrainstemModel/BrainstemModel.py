@@ -3,13 +3,14 @@ from inspect import getsource
 import nest
 import numpy as np
 
-from cochleas.anf_utils import AnfResponse, spikes_to_nestgen
-from utils.custom_sounds import Tone
-from utils.CustomConnections import connect
-from utils.log import logger, tqdm
+from utils.cochlea_utils import AnfResponse
+from utils.anf_utils import spikes_to_nestgen
+
+from utils.manual_fixes_to_nest.connect import connect
+from utils.log_utils import logger, tqdm
 
 from ..SpikingModel import SpikingModel
-from ..InhModel.params import Parameters
+from .params import Parameters
 
 
 class BrainstemModel(SpikingModel):

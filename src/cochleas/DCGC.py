@@ -1,7 +1,6 @@
 from os import makedirs
+from brian2 import SpikeMonitor, ms, plot, run, show #removed Inf
 
-import numpy as np
-from brian2 import Hz, SpikeMonitor, clip, kHz, ms, plot, run, show #removed Inf
 from brian2hears import (
     DCGC,
     FilterbankGroup,
@@ -9,20 +8,17 @@ from brian2hears import (
     MiddleEar,
     RestructureFilterbank,
     Sound,
-    ZhangSynapse,
     erbspace,
 )
 from joblib import Memory
-from scipy import signal
 from sorcery import dict_of
 
-from consts import Paths
+from utils.path_utils import Paths
 from utils.custom_sounds import Tone, ToneBurst
-from utils.log import logger, tqdm
+from utils.log_utils import logger, tqdm
 
-from .anf_response import AnfResponse
-from .consts import CFMAX, CFMIN, NUM_ANF_PER_HC, NUM_CF
-from .GammatoneCochlea import run_hrtf
+from utils.cochlea_utils import CFMAX, CFMIN, NUM_ANF_PER_HC, NUM_CF, AnfResponse
+from utils.hrtf_utils import run_hrtf
 
 COCHLEA_KEY = f"DCGC"
 CACHE_DIR = Paths.ANF_SPIKES_DIR + COCHLEA_KEY + "/"
