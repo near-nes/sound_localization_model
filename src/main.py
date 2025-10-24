@@ -18,7 +18,7 @@ from utils.log_utils import logger, tqdm
 
 nest.set_verbosity("M_ERROR")
 
-TIME_SIMULATION = 1000
+TIME_SIMULATION = 10
 
 create_execution_key @= lambda i, c, p: f"{create_sound_key(i)}&{c}&{p}"
 ex_key_with_time = (
