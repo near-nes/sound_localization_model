@@ -12,3 +12,5 @@ myoga_cache
 data/**/**
 data/Dimensions.xlsx
 secrets
+.python-version
+results

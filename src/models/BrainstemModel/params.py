@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from cochleas.consts import ITD_REMOVAL_STRAT
+from utils.cochlea_utils import ITD_REMOVAL_STRAT
 
 @dataclass
 class Parameters:
