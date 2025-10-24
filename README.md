@@ -27,4 +27,4 @@ Logs will be generated to monitor the simulation and help identify any errors.
 ---
 
 ## Plots
-Jupyter Notebooks to replicate the figures from the paper are included in this repository.
+Jupyter Notebooks to replicate the figures from the paper are included in `src/plot` repository.
